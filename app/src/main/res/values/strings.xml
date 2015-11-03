@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TonicApp</string>
+    <string name="get_first_name">Enter Your First Name</string>
+    <string name="get_last_name">Enter Your Last Name</string>
+    <string name="get_full_name">Get Full Name</string>
+    <string name="reverse_order">Reverse</string>
+    <string name="normal_order">Normal</string>
 </resources>

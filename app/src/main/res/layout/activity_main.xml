@@ -4,6 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/activity_horizontal_margin"
     tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/get_first_name"
+        android:inputType="textPersonName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/get_first_name"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:id="@+id/get_last_name"
+        android:layout_below="@+id/get_first_name"
+        android:inputType="textPersonName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/get_last_name"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:layout_below="@+id/get_last_name"
+        android:id="@+id/generate_full_name"
+        android:text="@string/get_full_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"/>
+
+    <ToggleButton
+        android:id="@+id/order_button"
+        android:textOff="@string/normal_order"
+        android:textOn="@string/reverse_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>
