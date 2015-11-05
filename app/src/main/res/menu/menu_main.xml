@@ -1,5 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity,.LoadingActivity">
+    tools:context=".MainActivity, .NameListActivity">
+    <item android:id="@+id/action_info"
+        android:title="@string/action_info"
+        android:icon="@mipmap/ic_tonic_launcher"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
 </menu>
