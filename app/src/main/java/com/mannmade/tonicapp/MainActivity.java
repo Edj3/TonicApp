@@ -19,7 +19,7 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
     //needs to be global to access within onCheckedListener and function that takes in parameter to switch order of names
-    boolean lastNameFirst = true;
+    boolean lastNameFirst = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
