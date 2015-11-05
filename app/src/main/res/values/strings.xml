@@ -3,6 +3,16 @@
     <string name="get_first_name">Enter Your First Name</string>
     <string name="get_last_name">Enter Your Last Name</string>
     <string name="get_full_name">Get Full Name</string>
+    <string name="full_name">Full Name Will Show Here</string>
     <string name="reverse_order">Reverse</string>
     <string name="normal_order">Normal</string>
+    <string name="action_info">Info</string>
+    <string name="very_cool">Very Cool</string>
+    <string name="about_logic">About My Logic</string>
+    <string name="download_list">Download List</string>
+    <string name="clear_names">Clear Names</string>
+    <string name="blank_names">Blank Names</string>
+    <string name="blank_info">You did not enter any names at all!\nPlease enter a first and/or last name and try again.</string>
+    <string name="ok">OK</string>
+    <string name="logic">This application was made for APIs 16 to 23 and demonstrates separation of concerns, listviews, layouts, connection logic, adapters, viewholder pattern, MVC, JSON Parsing, intents, dialogs, and much more.</string>
 </resources>
