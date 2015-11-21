@@ -1,12 +1,17 @@
 package com.mannmade.tonicapp;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -101,6 +106,34 @@ public class MainActivity extends AppCompatActivity {
         return (connectInfo != null && connectInfo.isConnectedOrConnecting());
     }
 
+    protected void launchMessage(){
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_tonic_launcher)
+                        .setContentTitle("You started my application!")
+                        .setContentText("My God... this is incredible!");
+    // Creates an explicit intent for an Activity in your app
+        Intent resultIntent = new Intent(this, MainActivity.class);
+
+    // The stack builder object will contain an artificial back stack for the
+    // started Activity.
+    // This ensures that navigating backward from the Activity leads out of
+    // your application to the Home screen.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+    // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(MainActivity.class);
+    // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent pending = PendingIntent.getActivity(this.getApplicationContext(), 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(pending);
+        // Cancel the notification after its selected
+        mBuilder.mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    // mId allows you to update the notification later on.
+        mNotificationManager.notify(0, mBuilder.build());
+    }
+
     //function that takes in the boolean for the order, the first name string, and the last name string and processes the full name based on the requests
     public String processFullName(boolean reverseOrder, String firstName, String lastName){
         if( (firstName.length() < 1 || firstName.equalsIgnoreCase("")) && (lastName.length() < 1 || lastName.equalsIgnoreCase("")) ){
@@ -147,6 +180,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_info) {
+            startService();
+            launchMessage();
             AlertDialog.Builder infoBuilder = new AlertDialog.Builder(this);
             infoBuilder.setTitle(R.string.about_logic);
             infoBuilder.setMessage(R.string.logic);
@@ -161,5 +196,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //We want to start the service from the main activity, so create the function to access the service class
+    public void startService() {
+        startService(new Intent(getBaseContext(), TonicService.class));
     }
 }
