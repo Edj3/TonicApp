@@ -45,15 +45,14 @@ public class TonicService extends Service {
                 UserDictionary.Words.WORD +" ASC"
         );
 
-        //if (cursor.moveToFirst()) {
-            //do {
-        cursor.moveToFirst();
-                long id = cursor.getLong(0);
-                String word = cursor.getString(1);
-                //Display Toast message that shows the first element in the user dictionary
-                Toast.makeText(getApplicationContext(), ("The first alphabetized element in my dictionary and its ID is" + "(" + id + ")" + " " + word), Toast.LENGTH_LONG).show();
-            //} while (cursor.moveToNext());
-        //}
+        if (cursor != null) {
+            long id = cursor.getLong(0);
+            String word = cursor.getString(1);
+            //Display Toast message that shows the first element in the user dictionary
+            Toast.makeText(getApplicationContext(), ("The first alphabetized element in my dictionary and its ID is" + "(" + id + ")" + " " + word), Toast.LENGTH_LONG).show();
+            cursor.close();
+        }
+
 
         Thread thread = new Thread() {
             @Override
