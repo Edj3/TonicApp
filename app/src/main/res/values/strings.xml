@@ -19,4 +19,6 @@
     <string name="blank_info">You did not enter any names at all!\nPlease enter a first and/or last name and try again.</string>
     <string name="ok">OK</string>
     <string name="logic">This application was made for APIs 16 to 23 and demonstrates separation of concerns, listviews, layouts, connection logic, adapters, viewholder pattern, MVC, JSON Parsing, intents, dialogs, and much more.</string>
+    <string name="tonic_service_started">Wow your service is now started!!!</string>
+    <string name="tonic_service_ended">Ok. We just ended your service. Thank you for your time!</string>
 </resources>

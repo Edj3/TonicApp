@@ -1,8 +1,12 @@
 package com.mannmade.tonicapp;
 
 import android.app.Service;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.IBinder;
+import android.provider.BaseColumns;
+import android.provider.UserDictionary;
 import android.widget.Toast;
 
 /**
@@ -29,6 +33,28 @@ public class TonicService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(getApplicationContext(), R.string.tonic_service_started, Toast.LENGTH_LONG).show();
+
+        //Implementation of Content Resolver to get the first alphabetized word of the users dictionary
+        ContentResolver resolver = getContentResolver();
+        String[] projection = new String[]{BaseColumns._ID, UserDictionary.Words.WORD};
+        Cursor cursor = resolver.query(
+                UserDictionary.Words.CONTENT_URI,
+                projection,
+                null,
+                null,
+                UserDictionary.Words.WORD +" ASC"
+        );
+
+        //if (cursor.moveToFirst()) {
+            //do {
+        cursor.moveToFirst();
+                long id = cursor.getLong(0);
+                String word = cursor.getString(1);
+                //Display Toast message that shows the first element in the user dictionary
+                Toast.makeText(getApplicationContext(), ("The first alphabetized element in my dictionary and its ID is" + "(" + id + ")" + " " + word), Toast.LENGTH_LONG).show();
+            //} while (cursor.moveToNext());
+        //}
+
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -40,7 +66,6 @@ public class TonicService extends Service {
                 }
             }
         };
-
         thread.start();
         return mStartMode;
     }
