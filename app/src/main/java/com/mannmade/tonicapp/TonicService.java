@@ -138,9 +138,8 @@ public class TonicService extends Service {
                 Toast.makeText(getApplicationContext(), ("Job " + gameId + ": " + gameJob + " - " + gameAbility), Toast.LENGTH_LONG).show();
                 // do something meaningful
             } while (gCursor.moveToNext());
+            gCursor.close();
         }
-
         db.delete("gametable", null, null);
-        gCursor.close();
     }
 }
