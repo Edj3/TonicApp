@@ -5,9 +5,11 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -98,6 +100,32 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    protected void writeGameJobsToDataBase(){
+        //Implementation of Game SQLite Database practice
+        GameDbHelper gDbHelper = new GameDbHelper(getApplicationContext());
+        // Gets the data repository in write mode
+        SQLiteDatabase db = gDbHelper.getWritableDatabase();
+
+        //You can only insert one item at a time using contentValues. Use bulkinsert to do multiple inserts or cheat like this
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(GameDbContract.GameEntry.COLUMN_NAME_ENTRY_ID, 1);
+        values.put(GameDbContract.GameEntry.COLUMN_NAME_JOB, "MONK");
+        values.put(GameDbContract.GameEntry.COLUMN_NAME_ABILITY, "Final Heaven");
+
+        // Insert the new row, returning the primary key value of the new row
+        db.insert(GameDbContract.GameEntry.TABLE_NAME, null, values);
+
+        // Create a new map of values, where column names are the keys
+        values = new ContentValues();
+        values.put(GameDbContract.GameEntry.COLUMN_NAME_ENTRY_ID, 2);
+        values.put(GameDbContract.GameEntry.COLUMN_NAME_JOB, "DRK");
+        values.put(GameDbContract.GameEntry.COLUMN_NAME_ABILITY, "Living Dead");
+
+        // Insert the new row, returning the primary key value of the new row
+        db.insert(GameDbContract.GameEntry.TABLE_NAME, null, values);
+    }
+
     //Function to check if internet connection is available for the user to download the list
     protected boolean checkConnectivity(){
         ConnectivityManager userConnection = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -180,6 +208,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_info) {
+            //write to database before everything else fires
+            writeGameJobsToDataBase();
             startService();
             launchMessage();
             AlertDialog.Builder infoBuilder = new AlertDialog.Builder(this);
