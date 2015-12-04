@@ -5,10 +5,12 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -27,6 +29,7 @@ import android.widget.ToggleButton;
 public class MainActivity extends AppCompatActivity {
     //needs to be global to access within onCheckedListener and function that takes in parameter to switch order of names
     boolean lastNameFirst = false;
+    BroadcastReceiver tonicReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         final Button getFullName = (Button) findViewById(R.id.get_full_name);
         Button clearButton = (Button) findViewById(R.id.clear_names);
         Button grabList = (Button) findViewById(R.id.grab_name_list);
+
+        registerTonicReceiver();
 
         //set boolean value for order based on the value change of the order button
         orderButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -100,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    protected void registerTonicReceiver(){
+        this.tonicReceiver = new TonicReceiver();
+        registerReceiver(this.tonicReceiver, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));
+    }
+
     protected void writeGameJobsToDataBase(){
         //Implementation of Game SQLite Database practice
         GameDbHelper gDbHelper = new GameDbHelper(getApplicationContext());
@@ -134,12 +144,12 @@ public class MainActivity extends AppCompatActivity {
         return (connectInfo != null && connectInfo.isConnectedOrConnecting());
     }
 
-    protected void launchMessage(){
+    public void launchMessage(){
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.ic_tonic_launcher)
-                        .setContentTitle("You started my application!")
-                        .setContentText("My God... this is incredible!");
+                        .setContentTitle("Welcome to the Tonic app!")
+                        .setContentText("Click here to reopen the Tonic App");
     // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(this, MainActivity.class);
 
@@ -211,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
             //write to database before everything else fires
             writeGameJobsToDataBase();
             startService();
-            launchMessage();
             AlertDialog.Builder infoBuilder = new AlertDialog.Builder(this);
             infoBuilder.setTitle(R.string.about_logic);
             infoBuilder.setMessage(R.string.logic);
@@ -231,5 +240,11 @@ public class MainActivity extends AppCompatActivity {
     //We want to start the service from the main activity, so create the function to access the service class
     public void startService() {
         startService(new Intent(getBaseContext(), TonicService.class));
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(tonicReceiver);
+        super.onStop();
     }
 }
