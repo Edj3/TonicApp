@@ -1,10 +1,6 @@
 package com.mannmade.tonicapp;
 
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,7 +11,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     //needs to be global to access within onCheckedListener and function that takes in parameter to switch order of names
     boolean lastNameFirst = false;
     BroadcastReceiver tonicReceiver;
+    public static final String RESTART_TONIC_ACTION = "com.mannmade.tonic.custom.intent.action.RESTART_TONIC";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
         final Button getFullName = (Button) findViewById(R.id.get_full_name);
         Button clearButton = (Button) findViewById(R.id.clear_names);
         Button grabList = (Button) findViewById(R.id.grab_name_list);
-
-        registerTonicReceiver();
 
         //set boolean value for order based on the value change of the order button
         orderButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -105,9 +99,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //this is called after onCreate and then is repeatedly called after onRestart
+    @Override
+    protected void onStart() {
+        registerTonicReceiver();
+        super.onStart();
+    }
+
+    @Override
+    protected void onRestart() {
+        Intent startTonicIntent = new Intent(RESTART_TONIC_ACTION);
+        sendBroadcast(startTonicIntent);
+        super.onRestart();
+    }
+
     protected void registerTonicReceiver(){
         this.tonicReceiver = new TonicReceiver();
-        registerReceiver(this.tonicReceiver, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));
+        registerReceiver(this.tonicReceiver, new IntentFilter(RESTART_TONIC_ACTION));
     }
 
     protected void writeGameJobsToDataBase(){
@@ -142,34 +150,6 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo connectInfo = userConnection.getActiveNetworkInfo();
 
         return (connectInfo != null && connectInfo.isConnectedOrConnecting());
-    }
-
-    public void launchMessage(){
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_tonic_launcher)
-                        .setContentTitle("Welcome to the Tonic app!")
-                        .setContentText("Click here to reopen the Tonic App");
-    // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(this, MainActivity.class);
-
-    // The stack builder object will contain an artificial back stack for the
-    // started Activity.
-    // This ensures that navigating backward from the Activity leads out of
-    // your application to the Home screen.
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-    // Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack(MainActivity.class);
-    // Adds the Intent that starts the Activity to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent pending = PendingIntent.getActivity(this.getApplicationContext(), 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(pending);
-        // Cancel the notification after its selected
-        mBuilder.mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-    // mId allows you to update the notification later on.
-        mNotificationManager.notify(0, mBuilder.build());
     }
 
     //function that takes in the boolean for the order, the first name string, and the last name string and processes the full name based on the requests
@@ -242,9 +222,10 @@ public class MainActivity extends AppCompatActivity {
         startService(new Intent(getBaseContext(), TonicService.class));
     }
 
+    //both onDestroy and onCreate are called once thru the entire lifetime of the app. unregister receiver here to make sure all broadcasts occur thru restart process
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         unregisterReceiver(tonicReceiver);
-        super.onStop();
+        super.onDestroy();
     }
 }

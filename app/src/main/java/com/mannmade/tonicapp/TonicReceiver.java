@@ -19,11 +19,10 @@ public class TonicReceiver extends BroadcastReceiver{
     }
 
     protected void launchMessage(Context context){
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(context)
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                         .setSmallIcon(R.mipmap.ic_tonic_launcher)
-                        .setContentTitle("Tonic App Warning")
-                        .setContentText("Make sure airplane mode is turned off");
+                        .setContentTitle(context.getResources().getString(R.string.tonic_restart_title))
+                        .setContentText(context.getResources().getString(R.string.tonic_restart_detail));
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(context, MainActivity.class);
 
