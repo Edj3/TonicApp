@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +20,11 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     //needs to be global to access within onCheckedListener and function that takes in parameter to switch order of names
@@ -103,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         registerTonicReceiver();
+        List<String> myList = Arrays.asList("hello", "helicopter", "hellbent", "hell frozen over");
+        Toast.makeText(getApplicationContext(), commonPrefix(myList), Toast.LENGTH_LONG).show();
         super.onStart();
     }
 
@@ -227,5 +234,72 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         unregisterReceiver(tonicReceiver);
         super.onDestroy();
+    }
+
+
+
+
+
+    //Common Exercises for job applications
+    public String reverseString(String anyString){
+        char[] stringArray = anyString.toCharArray();
+        char temp;
+        int numberOfLoops = stringArray.length / 2;
+        int maxLength = stringArray.length - 1;
+
+        for(int i =0; i < numberOfLoops; i++){
+            //temp storage of current element
+            temp = stringArray[i];
+            //set first character to last character (remember, last element is carriage return that's why we use -1 for maxLength value
+            stringArray[i] = stringArray[maxLength - i];
+            //set last character to temp value
+            stringArray[maxLength - i] = temp;
+        }
+        Log.v("Result String", new String(stringArray));
+        return new String(stringArray);
+    }
+
+    public Boolean isPalindrome(String anyString){
+        char[] stringArray = anyString.toLowerCase().toCharArray();
+        int numberOfLoops = stringArray.length / 2;
+        int maxLength = stringArray.length - 1;
+        boolean isPalin = true; //start on true so that if it passes all the way through, then it remains true
+
+        for(int i =0; i < numberOfLoops; i++){
+            if(stringArray[i] != stringArray[maxLength - i]){
+                isPalin = false;
+            }
+        }
+
+        Log.v("Result String", new String(stringArray));
+        return isPalin;
+    }
+
+    public String commonPrefix(List<String> stringList){
+        String commonPre = stringList.get(0).toLowerCase(); //commonPre is always the currently found prefix and is returned after process
+        char[] a1; //character array of commonPre
+        char[] a2; //character array of current element being compared to commonPre
+        String newPre; //used to create newly found prefix between two current elements being compared
+
+        //use for loop to be able to grab previous index (could have use list iterator too)
+        for(int i = 0; i < stringList.size(); i++){
+            if (i != 0){
+                a1 = commonPre.toCharArray();
+                a2 = stringList.get(i).toLowerCase().toCharArray();
+                newPre = "";
+
+                for(int j = 0; j < commonPre.length(); j++){
+                    if(a1[j] != a2[j]){
+                        commonPre = newPre;
+                        break;
+                    }else{
+                        newPre = newPre + a1[j];
+                    }
+                }
+            }
+        }
+
+        Log.v("Result String", commonPre);
+        return commonPre;
     }
 }
