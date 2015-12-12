@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.Arrays;
@@ -102,14 +101,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //Practice Implementation of Anonymous Class
+        SpecialString myString = new SpecialString(new myInterface() {
+            @Override
+            public void printOut() {
+                Log.v("Special String", "This is my special string called from my anonymous class");
+            }
+        });
     }
 
+    //New class Special String that takes in the interface
+    public class SpecialString{
+        SpecialString(myInterface i){
+            i.printOut();
+        }
+    }
     //this is called after onCreate and then is repeatedly called after onRestart
     @Override
     protected void onStart() {
         registerTonicReceiver();
         List<String> myList = Arrays.asList("hello", "helicopter", "hellbent", "hell frozen over");
-        Toast.makeText(getApplicationContext(), commonPrefix(myList), Toast.LENGTH_LONG).show();
+        Log.v("Common Prefix", commonPrefix(myList));
+        Log.v("Reverse String", reverseString("STRESSED"));
+        Log.v("Palindrome", isPalindrome("Level").toString());
+        //Toast.makeText(getApplicationContext(), commonPrefix(myList), Toast.LENGTH_LONG).show();
         super.onStart();
     }
 
@@ -301,5 +317,10 @@ public class MainActivity extends AppCompatActivity {
 
         Log.v("Result String", commonPre);
         return commonPre;
+    }
+
+    //Practice Interface
+    public interface myInterface{
+        void printOut();
     }
 }

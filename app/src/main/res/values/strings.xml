@@ -21,6 +21,6 @@
     <string name="logic">This application was made for APIs 16 to 23 and demonstrates separation of concerns, listviews, layouts, connection logic, adapters, viewholder pattern, MVC, JSON Parsing, intents, dialogs, and much more.</string>
     <string name="tonic_service_started">Wow your service is now started!!!</string>
     <string name="tonic_service_ended">Ok. We just ended your service. Thank you for your time!</string>
-    <string name="tonic_restart_title">Welcome back to the Tonic App!</string>
-    <string name="tonic_restart_detail">We noticed you restarted your phone. :P</string>
+    <string name="tonic_restart_title">Welcome Back to the Tonic Home Screen!</string>
+    <string name="tonic_restart_detail">Did you repower your phone or download that list? :P</string>
 </resources>
