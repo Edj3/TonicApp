@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         registerTonicReceiver();
         List<String> myList = Arrays.asList("hello", "helicopter", "hellbent", "hell frozen over");
+        Log.v("Word Pattern Match", String.valueOf(isSamePattern("abba", "dog cat cat dog")));
         Log.v("Common Prefix", commonPrefix(myList));
         Log.v("Reverse String", reverseString("STRESSED"));
         Log.v("Palindrome", isPalindrome("Level").toString());
@@ -263,6 +265,8 @@ public class MainActivity extends AppCompatActivity {
         int numberOfLoops = stringArray.length / 2;
         int maxLength = stringArray.length - 1;
 
+        Log.v("Before Reversal", new String(stringArray));
+
         for(int i =0; i < numberOfLoops; i++){
             //temp storage of current element
             temp = stringArray[i];
@@ -271,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
             //set last character to temp value
             stringArray[maxLength - i] = temp;
         }
-        Log.v("Result String", new String(stringArray));
+
         return new String(stringArray);
     }
 
@@ -287,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Log.v("Result String", new String(stringArray));
+        Log.v("Palindrome Given", new String(stringArray));
         return isPalin;
     }
 
@@ -313,10 +317,54 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
+            Log.v("Current Prefix", commonPre);
         }
 
-        Log.v("Result String", commonPre);
+
         return commonPre;
+    }
+
+    public boolean isSamePattern(String pattern, String str){
+        //basic null check
+        if((str == null) || pattern == null){
+            return false;
+        }
+
+        //split word using space as delimiter
+        String[] words = str.split("\\s");
+
+        //if lengths arent equal, the list of words does not match the pattern due to the extra words
+        if(pattern.length() != words.length){
+            return false;
+        }
+
+        //initialize and use two Hashmaps for swapping (Maps have no duplicates in java)
+        HashMap<Character, String> map1 = new HashMap<>();
+        HashMap<String, Character> map2 = new HashMap<>();
+
+        //for loop that goes through each character in pattern
+        for(int i = 0; i < pattern.length(); i++){
+            System.out.println("Current Element = " + i);
+
+            //check if map one contains the current character, if it doesnt, add it to map1. If it does, check to see if the current word matches the current entry of map one with a key of the current pattern character
+            if(map1.containsKey(pattern.charAt(i))){
+                //return false if current word does not match word at current element with key of current character
+                if(!words[i].equals(map1.get(pattern.charAt(i)))){
+                    return false;
+                }
+            }else{
+                //add to map1 statement
+                map1.put(pattern.charAt(i), words[i]);
+                //if map2 does not contain the key of the current word, then add it to map 2
+                if(!map2.containsKey(words[i])){
+                    map2.put(words[i], pattern.charAt(i));
+                }else{
+                    //if the current word does not exist in both map2 & map1, then return false. You have an extra word brother.
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     //Practice Interface
