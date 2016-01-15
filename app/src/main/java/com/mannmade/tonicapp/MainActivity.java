@@ -24,6 +24,7 @@ import android.widget.ToggleButton;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -127,6 +128,9 @@ public class MainActivity extends AppCompatActivity {
         Log.v("Common Prefix", commonPrefix(myList));
         Log.v("Reverse String", reverseString("STRESSED"));
         Log.v("Palindrome", isPalindrome("Level").toString());
+        Log.v("Integer to String", intToString(25));
+        Log.v("is Anagram", String.valueOf(isAnagram("abc", "cab")));
+        Log.v("is Prime Number", String.valueOf(isPrime(49)));
         //Toast.makeText(getApplicationContext(), commonPrefix(myList), Toast.LENGTH_LONG).show();
         super.onStart();
     }
@@ -363,6 +367,53 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
             }
+        }
+        return true;
+    }
+
+    public String intToString(int number) {  //Handle 0 - 99
+        //Example = 6 - "Six"
+        LinkedHashMap<Integer, String> intStringMap = new LinkedHashMap<Integer, String>();
+        intStringMap.put(0, "Zero");
+        intStringMap.put(1, "One");
+        intStringMap.put(2, "Two");
+        intStringMap.put(3, "Three");
+        intStringMap.put(4, "Four");
+        intStringMap.put(5, "Five"); //Handle 0 thru 20
+        intStringMap.put(20, "Twenty");
+
+        if (number <= 20) {
+            return intStringMap.get(number);
+        }
+
+        if(number > 20 && number <= 99){
+            int singleDigit = number % 10; //will give me a remainder to represent base 10
+            int doubleDigit = number - (number % 10);
+            return intStringMap.get(doubleDigit) + " " + intStringMap.get(singleDigit);
+        }
+
+        return null;
+    }
+
+    public boolean isAnagram(String phrase1, String phrase2) {
+        //Sort the 2 character arrays of the strings and then compare them element for element!
+        //Example: abc vs cab
+        char[] char1 = phrase1.toCharArray();
+        char[] char2 = phrase2.toCharArray();
+        Arrays.sort(char1);
+        Arrays.sort(char2);
+        return Arrays.equals(char1, char2);
+    }
+
+    //checks whether an int is prime or not.
+    boolean isPrime(int n) {
+        //check if n is a multiple of 2
+        if (n % 2 == 0) return false;
+
+        //if not, then just check the odds
+        for(int i = 3; i * i <= n; i += 2) {
+            if(n % i == 0)
+                return false;
         }
         return true;
     }
