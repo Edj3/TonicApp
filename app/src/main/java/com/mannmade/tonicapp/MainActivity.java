@@ -374,25 +374,46 @@ public class MainActivity extends AppCompatActivity {
     public String intToString(int number) {  //Handle 0 - 99
         //Example = 6 - "Six"
         LinkedHashMap<Integer, String> intStringMap = new LinkedHashMap<Integer, String>();
-        intStringMap.put(0, "Zero");
+        intStringMap.put(0, "Zero"); //Handle 0 thru 19
         intStringMap.put(1, "One");
         intStringMap.put(2, "Two");
         intStringMap.put(3, "Three");
         intStringMap.put(4, "Four");
-        intStringMap.put(5, "Five"); //Handle 0 thru 20
-        intStringMap.put(20, "Twenty");
+        intStringMap.put(5, "Five");
+        intStringMap.put(6, "Six");
+        intStringMap.put(7, "Seven");
+        intStringMap.put(8, "Eight");
+        intStringMap.put(9, "Nine");
+        intStringMap.put(10, "Ten");
+        intStringMap.put(11, "Eleven");
+        intStringMap.put(12, "Twelve");
+        intStringMap.put(13, "Thirteen");
+        intStringMap.put(14, "Fourteen");
+        intStringMap.put(15, "Fifteen");
+        intStringMap.put(16, "Sixteen");
+        intStringMap.put(17, "Seventeen");
+        intStringMap.put(18, "Eighteen");
+        intStringMap.put(19, "Nineteen");
+        intStringMap.put(20, "Twenty"); //Handle base 10 from 20 to 90
+        intStringMap.put(30, "Thirty");
+        intStringMap.put(40, "Forty");
+        intStringMap.put(50, "Fifty");
+        intStringMap.put(60, "Sixty");
+        intStringMap.put(70, "Seventy");
+        intStringMap.put(80, "Eigthy");
+        intStringMap.put(90, "Ninety");
 
         if (number <= 20) {
             return intStringMap.get(number);
         }
 
         if(number > 20 && number <= 99){
-            int singleDigit = number % 10; //will give me a remainder to represent base 10
-            int doubleDigit = number - (number % 10);
+            int singleDigit = number % 10; //will give me single digit of given number
+            int doubleDigit = number - (number % 10); //will give me base 10 value to determine first word
             return intStringMap.get(doubleDigit) + " " + intStringMap.get(singleDigit);
         }
 
-        return null;
+        return "Number not between 0 and 99";
     }
 
     public boolean isAnagram(String phrase1, String phrase2) {
@@ -411,7 +432,8 @@ public class MainActivity extends AppCompatActivity {
         if (n % 2 == 0) return false;
 
         //if not, then just check the odds
-        for(int i = 3; i * i <= n; i += 2) {
+        for(int i = 3; i * i <= n; i += 2) { //This is important, we are incrementing by each odd number (starting from 3, incrementing by 2) up to the square root of n
+            //this means you only go through half the factors of n, thus increasing performance rather than going thru all of n's factors!
             if(n % i == 0)
                 return false;
         }
